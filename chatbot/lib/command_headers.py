@@ -84,6 +84,12 @@ commands = {
             'argc': 0,
             'limit': 10,
             'return': 'command'
+        },
+
+        '!discord': {
+                'argc': 0,
+                'limit': 10,
+                'return': "<user>, you can find Amp's Discord server at: https://discordapp.com/invite/7Z4muuK"
         }
 }
 
@@ -100,7 +106,7 @@ def pass_to_function(command, user):
 
     commandHead = commandHead.replace('!', '')
 
-    module = importlib.import_module('lib.commands.%s' % commandHead)
+    module = importlib.import_module('chatbot.lib.commands.%s' % commandHead)
     function = getattr(module,commandHead)
 
     # If length of split command > 0, that means command has arguments

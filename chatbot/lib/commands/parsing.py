@@ -1,5 +1,5 @@
-from lib.command_headers import commands
-from lib.irc_basic import *
+from chatbot.lib.command_headers import commands
+from chatbot.lib.irc_basic import *
 import time
 
 
@@ -102,7 +102,7 @@ Check all parameters for valid command usage:
     -- Is the command a simple text return, or does it require code?
 '''
 #TODO: IMPLEMENT CURRENCY SYSTEM
-def check_command(con, msgDict):
+def check_command(con, msgDict, botQueue):
     commandHead = msgDict['splitcommand'][0]
 
     #Check if chat message is a command
@@ -113,12 +113,14 @@ def check_command(con, msgDict):
     #Check commands cooldown
     commandCooldown = check_command_cooled_down(commandHead)
     if not commandCooldown:
+        '''
         send_message(
             con, 
             msgDict['channel'], 
             "%s command is currently on cooldown. Please try again later!" 
             % msgDict['splitcommand'][0]
         )
+        '''
         return
 
     #Check if the user has access rights to the command
@@ -127,49 +129,39 @@ def check_command(con, msgDict):
             msgDict['badges']
     )
     if not commandBadgeAccess:
+        '''
         send_message(
             con, 
             msgDict['channel'], 
             "Sorry, you do not have access rights to the %s command." 
             % msgDict['splitcommand'][0]
         )
+        '''
         return
 
-    '''
-    # Check if command is a function, then check arguments
-    if check_command_is_function(commandHead):
-        # Argument Length = <Splitcommand> list - 2
-        # Why 2? Command head + empty entry at every message
-        commandArgLen = len(msgDict['splitcommand']) - 2
-        if commandArgLen == 0 and get_command_arg_length(commandHead) > 0:
-            send_message(
-                con, 
-                msgDict['channel'], 
-                "Sorry, the " + msgDict['splitcommand'][0] + " command "\
-                        +"requires arguments. Try something " \
-                        + "like \'" + msgDict['splitcommand'][0] + " 1\'."
-            )
-            return
-    '''
-
-
     update_command_last_used(commandHead)
-    execute_command(con, msgDict)
+    execute_command(con, msgDict, botQueue)
 
 
-def execute_command(con, msgDict):
+def execute_command(con, msgDict, botQueue):
     commandHead = msgDict['splitcommand'][0]
     if check_command_is_function(commandHead): 
 
-        from lib.command_headers import pass_to_function
-        send_message(
-                con,
-                msgDict['channel'],
-                pass_to_function(
-                    msgDict['splitcommand'], 
-                    msgDict['display-name'],
-                )
+        from chatbot.lib.command_headers import pass_to_function
+        commandReturn = pass_to_function(
+            msgDict['splitcommand'], 
+            msgDict['display-name'],
         )
+
+        msg = commandReturn.pop('msg', None) 
+        botQueue.put(commandReturn) 
+
+        if msg: 
+            send_message(
+                    con,
+                    msgDict['channel'],
+                    msg
+            )
 
     else:
         returnText = commands[commandHead]['return'].replace(
