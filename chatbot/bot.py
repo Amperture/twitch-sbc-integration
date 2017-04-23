@@ -98,11 +98,22 @@ def run(botQueue):
                         if (re.search('!com add \w*', message)):
                             cmds = pickle.load(open('cmds.p', 'r+'))
 
-                        check_command(
+                        command_run = check_command(
                             con, 
                             parse,
                             botQueue
                         )
+
+                        if command_run:
+                            command_success = execute_command(
+                                    con,
+                                    parse,
+                                    botQueue
+                            )
+                            if command_success:
+                                update_command_last_used(
+                                        parse['splitcommand'][0]
+                                )
 
         except socket.error:
             print('Socket died')

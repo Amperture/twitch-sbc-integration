@@ -139,8 +139,7 @@ def check_command(con, msgDict, botQueue):
         '''
         return
 
-    update_command_last_used(commandHead)
-    execute_command(con, msgDict, botQueue)
+    return True
 
 
 def execute_command(con, msgDict, botQueue):
@@ -173,3 +172,4 @@ def execute_command(con, msgDict, botQueue):
                 msgDict['channel'], 
                 returnText
         )
+    return True

@@ -98,11 +98,12 @@ This function borrows heavily from aidanrwt's pass_to_function
 '''
 def pass_to_function(command, user):
     commandHead = command[0]
+    commandList = list(command)
 
     # Command Message List has a nasty habit of having an empty string 
     # as final entry, best to remove that now.
-    command.remove(commandHead)
-    command.remove('')
+    commandList.remove(commandHead)
+    commandList.remove('')
 
     commandHead = commandHead.replace('!', '')
 
@@ -110,7 +111,7 @@ def pass_to_function(command, user):
     function = getattr(module,commandHead)
 
     # If length of split command > 0, that means command has arguments
-    return function(user, command)
+    return function(user, commandList)
 
 for command in commands:
     commands[command]['last_used'] = 0
