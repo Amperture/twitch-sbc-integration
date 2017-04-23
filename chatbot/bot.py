@@ -9,8 +9,6 @@ import time
 import os
 import re
 
-import Adafruit_BBIO.GPIO as GPIO
-
 from .lib.command_headers import commands
 from .lib.commands.parsing import *
 from .lib.irc_basic import *

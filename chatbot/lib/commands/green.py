@@ -2,7 +2,7 @@ import Adafruit_BBIO.GPIO as GPIO
 
 def green(user, args):
     queueEvent = {
-            'event' : 'gpio'
+            'eventType' : 'gpio'
     }
     GREEN_LED = 'P8_7'
 
