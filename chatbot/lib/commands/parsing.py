@@ -74,6 +74,8 @@ def check_valid_userbadge(command, userBadges):
         print(badgeRequired)
     except KeyError:
         return True
+    modTags = ['broadcaster', 'moderator']
+    subTags = ['broadcaster', 'moderator', 'subscriber']
 
     if badgeRequired == "broadcaster":
         if "broadcaster" in userBadges:
@@ -82,13 +84,13 @@ def check_valid_userbadge(command, userBadges):
             return False
 
     if badgeRequired == "moderator":
-        if ("broadcaster" or "moderator") in userBadges:
+        if any(x in userBadges for x in modTags):
             return True
         else:
             return False
 
     if badgeRequired == "subscriber":
-        if ("broadcaster" or "moderator" or "subscriber") in userBadges:
+        if any(x in userBadges for x in subTags):
             return True
         else:
             return False
@@ -124,6 +126,7 @@ def check_command(con, msgDict, botQueue):
         return
 
     #Check if the user has access rights to the command
+    print msgDict['badges'], msgDict['display-name']
     commandBadgeAccess = check_valid_userbadge(
             commandHead,
             msgDict['badges']
