@@ -22,16 +22,15 @@ Every command will have a series of 'tags'.
 
 '''
 
-
-'''
-CONSIDER ACTIONS ON CREATING A MOD ACTIONS LOG
--- Are mod actions in Twitch shown in IRC?
-'''
 import Adafruit_BBIO.GPIO as GPIO
 
 import importlib
 
 commands = {
+        '!cmdlist':{
+            'limit': 10,
+            'return': 'command'
+        }, 
 
         '!hello': {
             'limit': 10,
@@ -89,7 +88,8 @@ commands = {
         '!discord': {
                 'argc': 0,
                 'limit': 10,
-                'return': "<user>, you can find Amp's Discord server at: https://discordapp.com/invite/7Z4muuK"
+                'return': ("<user>, you can find Amp's Discord server at: "
+                    "https://discordapp.com/invite/7Z4muuK")
         }
 }
 

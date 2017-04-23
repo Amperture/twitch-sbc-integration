@@ -9,7 +9,7 @@ def xmas(user, args):
     queueEvent = {
             'eventType' : 'gpio',
             'event'     : 'xmas',
-            'msg'       : ("Hey, %s, it\'s beginning to look a lot like"
+            'msg'       : ("Hey, %s, it\'s beginning to look a lot like "
                 "Christmas!" % user) 
 
     }
