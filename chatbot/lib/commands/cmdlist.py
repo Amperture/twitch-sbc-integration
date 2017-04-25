@@ -1,5 +1,5 @@
 import Adafruit_BBIO.GPIO as GPIO
-from chatbot.lib.command_headers import commands
+from chatbot.lib.commands.parsing import commands
 
 def cmdlist(user, args):
 
@@ -11,14 +11,3 @@ def cmdlist(user, args):
 
     return queueEvent
 
-
-
-'''
-MAIN PROGRAM:
-    -- Chatbot (GhostyAmp)
-    -- Twitch API (New followers)
-    -- Chatters (Currency)
-    -- PubSub (Mod Logs, New Subs, Bits) 
-    -- Streamlabs (Paypal/CC, Bitcoin donations)
-    -- Fizz (Physical Interactions/Reactions)
-'''
