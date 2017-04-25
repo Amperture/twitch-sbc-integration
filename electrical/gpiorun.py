@@ -1,3 +1,4 @@
+import ConfigParser
 import Adafruit_BBIO.GPIO as GPIO
 import importlib
 
@@ -5,9 +6,18 @@ def gpio_handler(q_gpio):
     '''
     SETUP GPIO HERE
     '''
-    GPIO.setup("P8_8", GPIO.OUT)
-    GPIO.setup("P8_7", GPIO.OUT)
+    Config = ConfigParser.ConfigParser()
+    Config.read('config.ini')
 
+    gpioOutSetup = Config.get('GPIO', 'out').split(',')
+    gpioInSetup = Config.get('GPIO', 'in').split(',')
+
+    for setup in gpioOutSetup:
+        GPIO.setup(setup, GPIO.OUT)
+
+    for setup in gpioInSetup:
+        GPIO.setup(setup, GPIO.IN)
+        
     while True:
         '''
         CHECK q_gpio for messages, execute messages accordingly
@@ -20,8 +30,14 @@ def gpio_handler(q_gpio):
             queueArgs = list(queueEvent)
             queueArgs.remove(queueHead) 
 
+            module = importlib.import_module(
+                    'electrical.reactions.%s' % queueHead
+                    )
+            gpioFunc = getattr(module, "react_chat_%s" % queueHead)
+            gpioFunc(queueArgs, GPIO)
+
+'''
             if queueHead == "red":
-                print queueArgs
                 module = importlib.import_module(
                         'electrical.reactions.red'
                 )
@@ -29,12 +45,15 @@ def gpio_handler(q_gpio):
 
                 gpioFunc(queueArgs, GPIO)
 
-                #react_chat_red(queueEvent, GPIO)
             if queueHead == "green":
-                return "TODO"
-                #react_chat_red(queueEvent, GPIO)
-            if queueHead == "xmas":
-                return "TODO"
-                #react_chat_red(queueEvent, GPIO)
+                print "LOL"
 
+            if queueHead == "xmas":
+                module = importlib.import_module(
+                        'electrical.reactions.xmas'
+                )
+                gpioFunc = getattr(module, "react_chat_xmas")
+
+                gpioFunc(queueArgs, GPIO)
+'''
 

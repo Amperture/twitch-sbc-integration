@@ -1,20 +1,7 @@
-import Adafruit_BBIO.GPIO as GPIO
 import time
 
-def xmas(user, args):
+def react_chat_xmas(eventType, GPIO):
 
-    sendMessage = "Hey, %s, It's beginning to look a lot like Christmas!" \
-            % user
-    
-    queueEvent = {
-            'eventType' : 'gpio',
-            'event'     : 'xmas',
-            'msg'       : ("Hey, %s, it\'s beginning to look a lot like "
-                "Christmas!" % user) 
-
-    }
-
-    '''
     GREEN_LED = 'P8_7'
     RED_LED = 'P8_8'
 
@@ -24,7 +11,6 @@ def xmas(user, args):
     GPIO.output(GREEN_LED, GPIO.LOW)
     GPIO.output(RED_LED, GPIO.LOW)
 
-
     GPIO.output(GREEN_LED, GPIO.HIGH)
     time.sleep(0.5)
     GPIO.output(GREEN_LED, GPIO.LOW)
@@ -53,6 +39,3 @@ def xmas(user, args):
     GPIO.output(RED_LED, GPIO.HIGH)
     time.sleep(0.5)
     GPIO.output(RED_LED, GPIO.LOW)
-    '''
-    return queueEvent
-
