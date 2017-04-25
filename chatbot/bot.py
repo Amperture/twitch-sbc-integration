@@ -4,7 +4,7 @@ import ConfigParser
 import requests
 import importlib
 import socket
-import pickle
+import cPickle as pickle
 import time
 import os
 import re
@@ -15,12 +15,9 @@ from .lib.irc_basic import *
 
 from Queue import Queue
 
-
 def run(botQueue):
     Config = ConfigParser.ConfigParser()
     Config.read('config.ini')
-
-    mods = {}
 
     # Get CHAT information
     HOST = 'irc.chat.twitch.tv'                     # Twitch IRC Network
@@ -36,8 +33,6 @@ def run(botQueue):
     print('CHAN = ' + CHAN)
     print('\n')
     print('Chat Log:')
-
-
 
     # Connect to the host and join the appropriate channel(s)
     con = socket.socket()

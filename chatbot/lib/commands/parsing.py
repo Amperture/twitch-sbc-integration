@@ -1,7 +1,17 @@
-from chatbot.lib.command_headers import commands
 from chatbot.lib.irc_basic import *
+import importlib
+import cPickle as pickle
 import time
 
+with open("commands.p", "r") as f:
+    commandStream = f.read()
+
+commands = pickle.loads(commandStream)
+for command in commands:
+    commands[command]['last_used'] = 0
+
+# Automatically grab all commands from Pickle file.
+# Then reset their "last used" timer.
 
 def get_valid_command(command):
     if command[0] in commands:
@@ -149,7 +159,6 @@ def execute_command(con, msgDict, botQueue):
     commandHead = msgDict['splitcommand'][0]
     if check_command_is_function(commandHead): 
 
-        from chatbot.lib.command_headers import pass_to_function
         commandReturn = pass_to_function(
             msgDict['splitcommand'], 
             msgDict['display-name'],
@@ -176,3 +185,21 @@ def execute_command(con, msgDict, botQueue):
                 returnText
         )
     return True
+
+def pass_to_function(command, user):
+    commandHead = command[0]
+    commandList = list(command)
+
+    # Command Message List has a nasty habit of having an empty string 
+    # as final entry, best to remove that now.
+    commandList.remove(commandHead)
+    commandList.remove('')
+
+    commandHead = commandHead.replace('!', '')
+
+    module = importlib.import_module('chatbot.lib.commands.%s' % commandHead)
+    function = getattr(module,commandHead)
+
+    # If length of split command > 0, that means command has arguments
+    return function(user, commandList)
+
