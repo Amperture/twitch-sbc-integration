@@ -29,6 +29,7 @@ def gpio_handler(q_gpio):
             queueHead = queueEvent[0]
             queueArgs = list(queueEvent)
             queueArgs.remove(queueHead) 
+            print(queueHead)
 
             module = importlib.import_module(
                     'electrical.reactions.%s' % queueHead

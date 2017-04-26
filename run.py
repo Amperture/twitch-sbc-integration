@@ -7,6 +7,7 @@ from twitchchatbot.twitchchatbotrun import twitchchatbot_handler
 from twitchapi.currency_handler import currency_handler
 from electrical.gpiorun import gpio_handler
 from timer.timerrun import timer_handler
+from twitchapi.twitchapirun import twitchapi_handler
 
 q_chatbot = Queue()
 t_chatbot = Thread(target = twitchchatbot_handler, args=(q_chatbot,))
@@ -20,6 +21,9 @@ t_electrical = Thread(target = gpio_handler, args=(q_electrical,))
 q_timer = Queue()
 t_timer = Thread(target = timer_handler, args=(q_timer,))
 
+q_twitchapi = Queue()
+t_twitchapi = Thread(target = twitchapi_handler, args=(q_twitchapi,))
+
 
 t_chatbot.setDaemon(True)
 t_chatbot.start()
@@ -32,6 +36,9 @@ t_electrical.start()
 
 t_timer.setDaemon(True)
 t_timer.start()
+
+t_twitchapi.setDaemon(True)
+t_twitchapi.start()
 
 while True:
     if not q_chatbot.empty():
@@ -50,5 +57,14 @@ while True:
             q_chatbot.put(q_timer_get)
         else:
             q_timer.put(q_timer_get)
+
+    if not q_twitchapi.empty():
+        q_twitchapi_get = q_twitchapi.get()
+
+        if q_twitchapi_get['eventType'] == "gpio":
+            print (q_twitchapi_get)
+            q_chatbot.put(q_twitchapi_get)
+        else:
+            q_twitchapi.put(q_twitchapi_get)
 
     time.sleep(1)
