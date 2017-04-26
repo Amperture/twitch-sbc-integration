@@ -1,4 +1,4 @@
-from chatbot.lib.commands.parsing import commands
+from twitchchatbot.lib.commands.parsing import commands
 import cPickle as pickle
 
 def addcom(user, args):

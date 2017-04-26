@@ -3,13 +3,13 @@ import time
 from threading import Thread
 from Queue import Queue
 
-from chatbot.bot import run as chatbotrun
+from twitchchatbot.twitchchatbotrun import twitchchatbot_handler 
 from twitchapi.currency_handler import currency_handler
 from electrical.gpiorun import gpio_handler
 from timer.timerrun import timer_handler
 
 q_chatbot = Queue()
-t_chatbot = Thread(target = chatbotrun, args=(q_chatbot,))
+t_chatbot = Thread(target = twitchchatbot_handler, args=(q_chatbot,))
 
 q_currency = Queue()
 t_currency = Thread(target = currency_handler, args=(q_currency,))

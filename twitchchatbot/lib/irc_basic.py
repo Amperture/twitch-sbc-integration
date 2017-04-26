@@ -17,7 +17,6 @@ def parse_line(line):
         if splitBadge[0]: 
             parsed['badges'][splitBadge[0]] = splitBadge[1]
 
-    #TODO: Finish Emote Parsing
     '''
     emoteList = str.split(parsed['emotes'],',')
     parsed['emotes'] = {}

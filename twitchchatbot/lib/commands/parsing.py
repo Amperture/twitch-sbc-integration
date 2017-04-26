@@ -1,4 +1,4 @@
-from chatbot.lib.irc_basic import *
+from twitchchatbot.lib.irc_basic import *
 import importlib
 import cPickle as pickle
 import time
@@ -197,7 +197,8 @@ def pass_to_function(command, user):
 
     commandHead = commandHead.replace('!', '')
 
-    module = importlib.import_module('chatbot.lib.commands.%s' % commandHead)
+    module = importlib.import_module('twitchchatbot.lib.commands.%s' % \
+            commandHead)
     function = getattr(module,commandHead)
 
     # If length of split command > 0, that means command has arguments

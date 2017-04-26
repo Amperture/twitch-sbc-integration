@@ -15,7 +15,7 @@ from .lib.irc_basic import *
 
 from Queue import Queue
 
-def run(botQueue):
+def twitchchatbot_handler(botQueue):
     Config = ConfigParser.ConfigParser()
     Config.read('config.ini')
 
@@ -46,9 +46,6 @@ def run(botQueue):
     con.send('CAP REQ :twitch.tv/tags\r\n')
     con.send('CAP REQ :twitch.tv/membership\r\n')
 
-    # Seems like waiting for Twitch IRC to CAP ACK is a good idea
-    time.sleep(2)
-
     while True:
         try:
             if not botQueue.empty():
@@ -61,8 +58,6 @@ def run(botQueue):
                     )
                 else:
                     botQueue.put(queueCheck)
-            print("Do we ever make it here?")
-
 
             data = data+con.recv(1024)
             data_split = re.split(r'[\r\n]+', data)
