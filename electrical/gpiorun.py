@@ -35,25 +35,3 @@ def gpio_handler(q_gpio):
                     )
             gpioFunc = getattr(module, "react_chat_%s" % queueHead)
             gpioFunc(queueArgs, GPIO)
-
-'''
-            if queueHead == "red":
-                module = importlib.import_module(
-                        'electrical.reactions.red'
-                )
-                gpioFunc = getattr(module, "react_chat_red")
-
-                gpioFunc(queueArgs, GPIO)
-
-            if queueHead == "green":
-                print "LOL"
-
-            if queueHead == "xmas":
-                module = importlib.import_module(
-                        'electrical.reactions.xmas'
-                )
-                gpioFunc = getattr(module, "react_chat_xmas")
-
-                gpioFunc(queueArgs, GPIO)
-'''
-

@@ -46,8 +46,23 @@ def run(botQueue):
     con.send('CAP REQ :twitch.tv/tags\r\n')
     con.send('CAP REQ :twitch.tv/membership\r\n')
 
+    # Seems like waiting for Twitch IRC to CAP ACK is a good idea
+    time.sleep(2)
+
     while True:
         try:
+            if not botQueue.empty():
+                queueCheck = botQueue.get()
+                if queueCheck['eventType'] == 'chat':
+                    send_message(
+                            con,
+                            CHAN,
+                            queueCheck['event']
+                    )
+                else:
+                    botQueue.put(queueCheck)
+            print("Do we ever make it here?")
+
 
             data = data+con.recv(1024)
             data_split = re.split(r'[\r\n]+', data)
