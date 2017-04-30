@@ -7,7 +7,7 @@ def xmas(user, args):
             % user
     
     queueEvent = {
-            'eventType' : 'gpio',
+            'eventType' : 'electrical',
             'event'     : 'xmas',
             'msg'       : ("Hey, %s, it\'s beginning to look a lot like "
                 "Christmas!" % user) 

@@ -1,6 +1,6 @@
 def green(user, args):
     queueEvent = {
-            'eventType' : 'gpio',
+            'eventType' : 'electrical',
     }
 
     if len(args) == 0:

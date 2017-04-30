@@ -8,12 +8,27 @@ import cPickle as pickle
 import time
 import os
 import re
+from threading import Thread
 
 from .lib.command_headers import commands
 from .lib.commands.parsing import *
 from .lib.irc_basic import *
 
 from Queue import Queue
+
+
+def irc_datastream_recv(con, data, q_irc):
+    while True:
+        data = data+con.recv(1024)
+        data_split = re.split(r'[\r\n]+', data)
+        data = data_split.pop()
+
+        for line in data_split:
+            line = str.split(line)
+            if len(line) >= 1:
+                q_irc.put(line)
+                
+
 
 def twitchchatbot_handler(botQueue):
     Config = ConfigParser.ConfigParser()
@@ -46,11 +61,17 @@ def twitchchatbot_handler(botQueue):
     con.send('CAP REQ :twitch.tv/tags\r\n')
     con.send('CAP REQ :twitch.tv/membership\r\n')
 
+    q_irc_retrieve = Queue()
+    t_irc_retrieve = Thread( target = irc_datastream_recv, args = [con, data, 
+        q_irc_retrieve])
+    t_irc_retrieve.setDaemon(True)
+    t_irc_retrieve.start()
+
     while True:
         try:
             if not botQueue.empty():
                 queueCheck = botQueue.get()
-                if queueCheck['eventType'] == 'chat':
+                if queueCheck['eventType'] == 'twitchchatbot':
                     send_message(
                             con,
                             CHAN,
@@ -59,23 +80,14 @@ def twitchchatbot_handler(botQueue):
                 else:
                     botQueue.put(queueCheck)
 
-            data = data+con.recv(1024)
-            data_split = re.split(r'[\r\n]+', data)
-            data = data_split.pop()
 
-            for line in data_split:
-                line = str.split(line)
-
-                if len(line) >= 1:
-                    #print(line)
+            if not q_irc_retrieve.empty():
+                    line = q_irc_retrieve.get()
 
                     # Stay connected to the server
                     if line[0] == 'PING':
                         print(line[0] +':'+ line[1])
                         send_pong(con, line[1])
-
-                    #Add mod to dictionary
-                    message = ' '.join(line)
 
                     # Parse PRIVMSG
                     if (len(line) >= 3 and line[2] == 'PRIVMSG'):
@@ -95,11 +107,6 @@ def twitchchatbot_handler(botQueue):
                                 + ' (' + parse['channel'] + ')' + ': ' \
                                 + parse['message'] + '\n')
                         log.close()
-
-
-                        ''' Load new commands whenever somebody adds a command '''
-                        if (re.search('!com add \w*', message)):
-                            cmds = pickle.load(open('cmds.p', 'r+'))
 
                         command_run = check_command(
                             con, 

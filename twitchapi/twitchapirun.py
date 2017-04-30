@@ -28,8 +28,16 @@ def twitchapi_handler(q_twitchapi):
                 with open('twitchapi/latestfollower', "w+") as f:
                         f.write(latest)
                 queueEvent = {
-                        'eventType' : 'gpio',
+                        'eventType' : 'electrical',
                         'event'     : 'newfollower'
+                }
+                q_twitchapi.put(queueEvent)
+
+                queueEvent = {
+                        'eventType' : 'twitchchatbot',
+                        'event'     : ('%s has followed the channel! '
+                            'Thank you so much! Enjoy your dancing light '
+                            'show!' % latest)
                 }
                 q_twitchapi.put(queueEvent)
 

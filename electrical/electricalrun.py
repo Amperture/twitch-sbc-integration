@@ -3,7 +3,7 @@ import Adafruit_BBIO.GPIO as GPIO
 import importlib
 import time
 
-def gpio_handler(q_gpio):
+def electrical_handler(q_gpio):
     '''
     SETUP GPIO HERE
     '''
@@ -23,7 +23,7 @@ def gpio_handler(q_gpio):
         '''
         CHECK q_gpio for messages, execute messages accordingly
         '''
-        if not q_gpio.empty()
+        if not q_gpio.empty():
             q_gpio_check = q_gpio.get()
 
             if q_gpio_check ['eventType'] == "electrical":
@@ -31,7 +31,6 @@ def gpio_handler(q_gpio):
                 queueHead = queueEvent[0]
                 queueArgs = list(queueEvent)
                 queueArgs.remove(queueHead) 
-                print(queueHead)
 
                 module = importlib.import_module(
                         'electrical.reactions.%s' % queueHead
@@ -40,4 +39,4 @@ def gpio_handler(q_gpio):
                 gpioFunc(queueArgs, GPIO)
             else:
                 q_gpio.put(q_gpio_check)
-                time.sleep(0.25)
+                time.sleep(2)
