@@ -1,12 +1,12 @@
 from twitchchatbot.lib.irc_basic import *
 import importlib
-import cPickle as pickle
+import json
 import time
 
-with open("commands.p", "r") as f:
+with open("commands.json", "r") as f:
     commandStream = f.read()
 
-commands = pickle.loads(commandStream)
+commands = json.loads(commandStream)
 for command in commands:
     commands[command]['last_used'] = 0
 

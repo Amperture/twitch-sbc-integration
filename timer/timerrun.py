@@ -5,7 +5,7 @@ import json
 
 def timer_handler(q_timer):
 
-    time_to_sleep = 60*5
+    time_to_sleep = 60*30
     messageIndex = 0 
 
     while True:

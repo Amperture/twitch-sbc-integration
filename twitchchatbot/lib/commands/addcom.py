@@ -1,5 +1,5 @@
 from twitchchatbot.lib.commands.parsing import commands
-import cPickle as pickle
+import json
 
 def addcom(user, args):
     # Concatenate a list of strings down to a single, space delimited string.
@@ -22,8 +22,8 @@ def addcom(user, args):
 
         commands[commandHead]['return'] = " ".join(args)
         
-        with open("commands.p", "w") as f:
-            pickle.dump(commands, f)
+        with open("commands.json", "w") as f:
+            json.dump(commands, f, indent=1)
 
         queueEvent['msg'] = "%s has added the %s command!" %( \
                 user, commandHead)

@@ -1,0 +1,75 @@
+{
+ "!green": {
+  "limit": 4, 
+  "argc": 1, 
+  "return": "command", 
+  "last_used": 0
+ }, 
+ "!red": {
+  "limit": 5, 
+  "argc": 1, 
+  "return": "command", 
+  "last_used": 0
+ }, 
+ "!modcheck": {
+  "last_used": 0, 
+  "argc": 1, 
+  "return": "<user> qualifies for Mod-limited commands!", 
+  "limit": 0, 
+  "userbadge": "moderator"
+ }, 
+ "!xmas": {
+  "limit": 10, 
+  "argc": 0, 
+  "return": "command", 
+  "last_used": 0
+ }, 
+ "!subcheck": {
+  "last_used": 0, 
+  "argc": 1, 
+  "return": "<user>, you qualify for Subscriber-limited commands!", 
+  "limit": 0, 
+  "userbadge": "subscriber"
+ }, 
+ "!broadcastercheck": {
+  "last_used": 0, 
+  "argc": 1, 
+  "return": "Yes, <user> is indeed the broadcaster!", 
+  "limit": 0, 
+  "userbadge": "broadcaster"
+ }, 
+ "!hello": {
+  "limit": 10, 
+  "return": "Hello <user>!", 
+  "last_used": 0
+ }, 
+ "!blue": {
+  "limit": 0, 
+  "argc": 1, 
+  "return": "But there is no blue light, <user>!", 
+  "last_used": 0
+ }, 
+ "!discord": {
+  "limit": 10, 
+  "argc": 0, 
+  "return": "<user>, you can find Amp's Discord server at: https://discordapp.com/invite/7Z4muuK", 
+  "last_used": 0
+ }, 
+ "!twitter": {
+  "last_used": 0, 
+  "return": "Please visit Amp's Twitter page and drop him a follow at https://twitter.com/amperture !", 
+  "limit": 10, 
+  "userbadge": "moderator"
+ }, 
+ "!addcom": {
+  "last_used": 0, 
+  "return": "command", 
+  "limit": 10, 
+  "userbadge": "broadcaster"
+ }, 
+ "!cmdlist": {
+  "limit": 10, 
+  "return": "command", 
+  "last_used": 0
+ }
+}
