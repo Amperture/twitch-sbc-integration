@@ -1,14 +1,53 @@
 import time
+import ConfigParser
+import importlib
 
 from threading import Thread
 from Queue import Queue
 
+'''
 from twitchchatbot.twitchchatbotrun import twitchchatbot_handler 
 from twitchapi.currency_handler import currency_handler
 from electrical.gpiorun import gpio_handler
 from timer.timerrun import timer_handler
 from twitchapi.twitchapirun import twitchapi_handler
+'''
 
+'''
+Currently "enabled" modules:
+    - twitchchatbot
+    - currency
+    - electrical
+    - timer
+    - twitchapi
+'''
+
+Config = ConfigParser.ConfigParser()
+Config.read('config.ini')
+
+q_twitchbeagle = Queue()
+
+enabledModules = Config.get('MODULES', 'enabled').split(',')
+moduleThreads = {}
+
+for module in enabledModules:
+    moduleThreads[module] = {}
+    moduleThreads[module]['import'] = importlib.import_module(
+            '%s.%srun' % (module, module)
+    ) 
+    moduleThreads[module]['function'] = getattr(
+            moduleThreads[module]['import'],
+            '%s_handler' % module
+    )
+    moduleThreads[module]['thread'] = Thread( 
+            target = moduleThreads[module]['function'],
+            args = (q_twitchbeagle,)
+    )
+    moduleThreads[module]['thread'].setDaemon(True)
+    moduleThreads[module]['thread'].start()
+    
+    
+'''
 q_chatbot = Queue()
 t_chatbot = Thread(target = twitchchatbot_handler, args=(q_chatbot,))
 
@@ -39,8 +78,11 @@ t_timer.start()
 
 t_twitchapi.setDaemon(True)
 t_twitchapi.start()
+'''
 
 while True:
+    time.sleep(1)
+'''
     if not q_chatbot.empty():
         q_chatbot_get = q_chatbot.get()
 
@@ -66,5 +108,4 @@ while True:
             q_chatbot.put(q_twitchapi_get)
         else:
             q_twitchapi.put(q_twitchapi_get)
-
-    time.sleep(1)
+'''
