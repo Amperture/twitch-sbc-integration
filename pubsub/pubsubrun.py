@@ -1,10 +1,12 @@
 import websocket
+import ast
 import thread
 import time
 import json
 import pprint
 
 clientID = "3774415"
+psynapsID = "26158435"
 with open("pubsub/ampertureoauth", 'r') as f:
     ampOauth = f.read().rstrip('\n')
 
@@ -18,7 +20,7 @@ listenDict = {
         'data': {
             'topics' : [
                 'chat_moderator_actions.' + clientID + '.' + clientID,
-                'channel-bits-events-v1.26158435'
+                'channel-bits-events-v1.' + clientID
                 ],
             'auth_token': ampOauth
         } 
@@ -44,18 +46,28 @@ def pubsub_handler(q_pubsub):
 
     def on_message(ws, message):
         jsonmessage = json.loads(message)
+        pprint.pprint(jsonmessage, indent=2)
         try: 
             message_check = json.loads(jsonmessage['data']['message'])
+            print(type(message_check))
+            pprint.pprint((message_check))
+            print(message_check['message_type'])
             if message_check['message_type'] == 'bits_event':
-
+                print("BITS EVENT FOUND")
                 queueEvent = {}
-                queueEvent['eventType'] == 'electrical'
-                queueEvent['event'] == 'bits'
+                queueEvent['eventType'] = 'electrical'
+                queueEvent['event'] = 'bits'
                 q_pubsub.put(queueEvent)
 
-                print("BITS SENT: " + str(message_check['data']['bits_used']))
-                print("SENT FROM: " + message_check['data']['user_name'])
-                print("SENT TO: " + message_check['data']['channel_name'])
+                bits_used = str(message_check['data']['bits_used'])
+                user_name = message_check['data']['user_name']
+                channel_name = message_check['data']['channel_name']
+
+                queueEvent = {}
+                queueEvent['eventType'] = 'twitchchatbot'
+                queueEvent['event'] = ("Thank you, %s, for sending %s Bit(s) "
+                        "to %s!!" % (user_name, bits_used, channel_name))
+                q_pubsub.put(queueEvent)
 
         except: 
             pass
