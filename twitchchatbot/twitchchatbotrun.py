@@ -127,9 +127,35 @@ def twitchchatbot_handler(botQueue):
 
         except socket.error:
             print('Socket died')
+            time.sleep(2*60)
+            con.close()
+            con = socket.socket()
+            con.connect((HOST, PORT))
+            data = ""
+            send_pass(con, OAUTH)
+            send_nick(con, NICK)
+            join_channel(con, CHAN)
+            debugtest = 0
+            con.send('CAP REQ :twitch.tv/commands\r\n')
+            con.send('CAP REQ :twitch.tv/tags\r\n')
+            con.send('CAP REQ :twitch.tv/membership\r\n')
+            continue
 
         except socket.timeout:
             print('Socket timeout')
+            con.close()
+            time.sleep(2*60)
+            con = socket.socket()
+            con.connect((HOST, PORT))
+            data = ""
+            send_pass(con, OAUTH)
+            send_nick(con, NICK)
+            join_channel(con, CHAN)
+            debugtest = 0
+            con.send('CAP REQ :twitch.tv/commands\r\n')
+            con.send('CAP REQ :twitch.tv/tags\r\n')
+            con.send('CAP REQ :twitch.tv/membership\r\n')
+            continue
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 import Adafruit_BBIO.GPIO as GPIO
-from chatbot.lib.commands.parsing import commands
+from twitchchatbot.lib.commands.parsing import commands
 
 def cmdlist(user, args):
 

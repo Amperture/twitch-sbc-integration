@@ -4,6 +4,7 @@ import importlib
 
 from threading import Thread
 from Queue import Queue
+#from pubsub.pubsubex import pubsubex
 
 '''
 from twitchchatbot.twitchchatbotrun import twitchchatbot_handler 
@@ -45,6 +46,8 @@ for module in enabledModules:
     )
     moduleThreads[module]['thread'].setDaemon(True)
     moduleThreads[module]['thread'].start()
+
+#pubsubex(q_twitchbeagle)
     
     
 '''

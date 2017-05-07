@@ -5,7 +5,7 @@ import json
 
 def timer_handler(q_timer):
 
-    time_to_sleep = 60*30
+    time_to_sleep = 60*20
     messageIndex = 0 
 
     while True:
@@ -15,7 +15,7 @@ def timer_handler(q_timer):
             messages = json.load(f)
 
         queueEvent = { 
-                'eventType': 'chat',
+                'eventType': 'twitchchatbot',
                 'event'    : messages[messageIndex]
         }
 
