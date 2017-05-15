@@ -4,8 +4,10 @@ import websocket
 import thread
 import time
 import json
+import pprint
 
 clientID = "3774415"
+psynapsID = "26158435"
 with open("ampertureoauth", 'r') as f:
     ampOauth = f.read().rstrip('\n')
 
@@ -14,14 +16,33 @@ listenDict = {
         'nonce':"twitchPubSub",
         'data': {
             'topics' : [
-                'chat_moderator_actions.' + clientID + '.' + clientID
+                'channel-bits-events-v1.' + clientID
                 ],
             'auth_token': ampOauth
         } 
 }
 
 def on_message(ws, message):
-    print json.loads(message)
+    jsonmessage = json.loads(message)
+    print(jsonmessage)
+    try: 
+        jsonmessage2 = json.loads(jsonmessage['data']['message'])
+        if message_check['message_type'] == 'bits_event':
+            print("BITS SENT: " + str(message_check['data']['bits_used']))
+            print("SENT FROM: " + message_check['data']['user_name'])
+            print("SENT TO: " + message_check['data']['channel_name'])
+
+    except: 
+        pass
+    
+    '''
+    for key, value in jsonmessage[0]:
+        try:
+            if key == "type":
+                print value
+        except:
+            pass
+    '''
 
 def on_error(ws, error):
     print error

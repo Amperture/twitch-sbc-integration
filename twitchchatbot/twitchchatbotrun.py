@@ -9,6 +9,7 @@ import time
 import os
 import re
 from threading import Thread
+from config import CHAT_TOKEN
 
 from .lib.command_headers import commands
 from .lib.commands.parsing import *
@@ -37,9 +38,10 @@ def twitchchatbot_handler(botQueue):
     # Get CHAT information
     HOST = 'irc.chat.twitch.tv'                     # Twitch IRC Network
     PORT = 6667                                     # Default IRC-Port
-    CHAN = Config.get('CHAT', 'channel')
+    CHAN = '#' + Config.get('CHAT', 'channel')
     NICK = Config.get('CHAT', 'user')
-    OAUTH = Config.get('CHAT', 'oauth')
+    #OAUTH = Config.get('CHAT', 'oauth')
+    OAUTH = CHAT_TOKEN
 
     #Show info in Term
     print('Connection Information:')

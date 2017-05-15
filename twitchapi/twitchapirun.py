@@ -1,49 +1,67 @@
 import requests
-import serial
+import importlib
 import time
 import json
+import ConfigParser
+from twitchapi.krakenv5 import channels
 
 def twitchapi_handler(q_twitchapi): 
-    with open('LaunchpadBot_ClientID', 'r') as f:
-        client_id = f.read().strip()
-
-    url = "https://api.twitch.tv/kraken/channels/amperture/follows"
-    headers = {
-            'Client-ID': client_id
-            }
 
     requests.packages.urllib3.disable_warnings()
+    Config = ConfigParser.ConfigParser()
+    Config.read('config.ini')
+    channelName = Config.get('CHAT', 'channel')
 
     while(True):
         try:
-            r = requests.get(url, headers=headers)
+            if not q_twitchapi.empty():
+                queueCheck = q_twitchapi.get()
+                if queueCheck['eventType'] == 'twitchapi':
+                    queueEvent = queueCheck['event'].split(' ')
+                    queueHead = queueEvent[0]
+                    queueArgs = list(queueEvent)
+                    queueArgs.remove(queueHead) 
 
-            reqReturn = r.json()
-            latest = r.json()["follows"][0]['user']['display_name']
+                    module = importlib.import_module(
+                            'twitchapi.commands.%s' % queueHead
+                            )
+                    print "MODULE IMPORTED"
+                    apiFunc = getattr(module, "react_chat_%s" % queueHead)
+                    apiFunc(queueArgs)
+                else:
+                    q_twitchapi.put(queueCheck)
 
-            with open('twitchapi/latestfollower', "r") as f:
-                stored = f.read()
-
-            if latest != stored:
-                with open('twitchapi/latestfollower', "w+") as f:
-                        f.write(latest)
-                queueEvent = {
-                        'eventType' : 'electrical',
-                        'event'     : 'newfollower'
-                }
-                q_twitchapi.put(queueEvent)
-
-                queueEvent = {
-                        'eventType' : 'twitchchatbot',
-                        'event'     : ('%s has followed the channel! '
-                            'Thank you so much! Enjoy your dancing light '
-                            'show!' % latest)
-                }
-                q_twitchapi.put(queueEvent)
-
+            checkForNewFollower(channelName, q_twitchapi)
             time.sleep(5)
-        except:
+        except Exception,e:
             with open('twitchapi/errors', "a") as f:
-                f.write(time.time() + " API ERROR \r\n\r\n" + reqReturn)
-            print reqReturn
+                f.write(str(time.time()) + " API ERROR \r\n\r\n" + str(e))
             pass
+
+def checkForNewFollower(channel, q_twitchapi):
+    followers = channels.getChannelFollowers(channel)
+    latestFollower = followers["follows"][0]['user']['display_name']
+    with open('twitchapi/latestfollower', 'r') as f:
+        latestKnownFollower = f.read()
+
+    if latestFollower == latestKnownFollower:
+        return None
+    else:
+        with open('twitchapi/latestfollower', "w+") as f:
+            f.write(latestFollower)
+
+        queueEvent = {
+                'eventType' : 'electrical',
+                'event'     : 'newfollower'
+        }
+        q_twitchapi.put(queueEvent)
+
+        queueEvent = {
+                'eventType' : 'twitchchatbot',
+                'event'     : ('%s has followed the channel! '
+                    'Thank you so much! Enjoy your dancing light '
+                    'show!' % latestFollower)
+        }
+        q_twitchapi.put(queueEvent)
+
+

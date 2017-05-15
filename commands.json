@@ -67,6 +67,18 @@
   "limit": 10, 
   "userbadge": "broadcaster"
  }, 
+ "!settitle": {
+  "last_used": 600, 
+  "return": "command", 
+  "limit": 5, 
+  "userbadge": "moderator"
+ }, 
+ "!setgame": {
+  "last_used": 600, 
+  "return": "command", 
+  "limit": 5, 
+  "userbadge": "moderator"
+ }, 
  "!cmdlist": {
   "limit": 10, 
   "return": "command", 

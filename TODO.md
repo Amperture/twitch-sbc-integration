@@ -12,3 +12,8 @@ Look for ways for !addcom to be exploited for fun and profit.
     [twitchchatbot/lib/commands/parsing.py](twitchchatbot/lib/commands/parsing.py)
 * Convert command storage file from Pickle to JSON for security purposes.
     * lib/commands/addcom.py
+
+#Kraken API
+* Work on setting up system to pull OAuth tokens automatically.
+    * Start thinking about ways to set up client with application
+        authorization url.
