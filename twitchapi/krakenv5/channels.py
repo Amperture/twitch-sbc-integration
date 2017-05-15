@@ -83,13 +83,5 @@ def setChannelGame(channel, game):
 
     return status
 
-    
-
-if __name__ == "__main__":
-    channel_id = getChannelObject('amperture')['_id']
-
-    pprint.pprint(setChannelTitle(
-        str(channel_id), CLIENT_ID, EDITOR_TOKEN,
-        '[Affiliate] Twitch Beagle!! -- Kraken v5 API Infrastructure [!cmdlist]'))
-
-
+def getChannelId(channel):
+    return getChannelObject(channel)['_id']

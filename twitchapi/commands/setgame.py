@@ -1,6 +1,9 @@
-from twitchapi.krakenv5.channels import setChannelGame
+from twitchapi.krakenv5.channels import setChannelGame, getChannelId
+import ConfigParser
 
 def react_chat_setgame(args):
-    #todo: grab channel id programmatically
-    print "attemptting to set game"
-    setChannelGame('3774415', ' '.join(args))
+    config = ConfigParser.ConfigParser()
+    config.read('config.ini')
+    channelName = config.get('CHAT', 'channel')
+    channel = str(getChannelId(channelName))
+    setChannelGame(channel, ' '.join(args))

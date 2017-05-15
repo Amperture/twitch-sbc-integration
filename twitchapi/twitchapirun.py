@@ -25,7 +25,6 @@ def twitchapi_handler(q_twitchapi):
                     module = importlib.import_module(
                             'twitchapi.commands.%s' % queueHead
                             )
-                    print "MODULE IMPORTED"
                     apiFunc = getattr(module, "react_chat_%s" % queueHead)
                     apiFunc(queueArgs)
                 else:
@@ -40,7 +39,7 @@ def twitchapi_handler(q_twitchapi):
 
 def checkForNewFollower(channel, q_twitchapi):
     followers = channels.getChannelFollowers(channel)
-    latestFollower = followers["follows"][0]['user']['display_name']
+    latestFollower = followers["follows"][0]['user']['name']
     with open('twitchapi/latestfollower', 'r') as f:
         latestKnownFollower = f.read()
 

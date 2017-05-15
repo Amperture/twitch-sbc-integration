@@ -1,6 +1,10 @@
-from twitchapi.krakenv5.channels import setChannelTitle
+from twitchapi.krakenv5.channels import setChannelTitle, getChannelId
+import ConfigParser
+
 def react_chat_settitle(args):
-    #todo: grab channel id programmatically
-    print "attemptting to set title"
-    setChannelTitle('3774415', ' '.join(args))
+    config = ConfigParser.ConfigParser()
+    config.read('config.ini')
+    channelName = config.get('CHAT', 'channel')
+    channel = str(getChannelId(channelName))
+    setChannelTitle(channel, ' '.join(args))
 
