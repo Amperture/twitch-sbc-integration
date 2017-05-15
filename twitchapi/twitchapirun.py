@@ -39,7 +39,8 @@ def twitchapi_handler(q_twitchapi):
 
 def checkForNewFollower(channel, q_twitchapi):
     followers = channels.getChannelFollowers(channel)
-    latestFollower = followers["follows"][0]['user']['name']
+    latestFollower = followers["follows"][0]['user']['display_name'].encode(
+            'utf-8')
     with open('twitchapi/latestfollower', 'r') as f:
         latestKnownFollower = f.read()
 
