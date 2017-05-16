@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*- 
 import basic as endpoints
 import pprint
 import ConfigParser
@@ -21,7 +22,6 @@ def getChannelObject(channel):
     return channel_object
 
 def getChannelOauth(channel):
-    #TODO
     args = []
 
     header = {
@@ -85,3 +85,13 @@ def setChannelGame(channel, game):
 
 def getChannelId(channel):
     return getChannelObject(channel)['_id']
+
+if __name__ == "__main__":
+    followers = getChannelFollowers('amperture')
+    for user in followers['follows']:
+        print("ID: %d"% user['user']['_id'])
+        print("Username: %s" %user['user']['name'])
+        print("Type: %s" %user['user']['type'])
+        print user['user']['display_name'].encode('utf-8')
+        #print("Display: %s" % repr(user['user']['display_name']))
+        print "\r\n\r\n"

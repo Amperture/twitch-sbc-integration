@@ -44,9 +44,9 @@
   "last_used": 0
  }, 
  "!blue": {
-  "limit": 0, 
+  "limit": 10, 
   "argc": 1, 
-  "return": "But there is no blue light, <user>!", 
+  "return": "command", 
   "last_used": 0
  }, 
  "!discord": {

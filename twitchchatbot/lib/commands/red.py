@@ -20,15 +20,3 @@ def red(user, args):
         queueEvent['msg'] = "Command usage: \"!red on \" or \"!red off\""
 
     return queueEvent
-
-
-
-'''
-MAIN PROGRAM:
-    -- Chatbot (GhostyAmp)
-    -- Twitch API (New followers)
-    -- Chatters (Currency)
-    -- PubSub (Mod Logs, New Subs, Bits) 
-    -- Streamlabs (Paypal/CC, Bitcoin donations)
-    -- Fizz (Physical Interactions/Reactions)
-'''
