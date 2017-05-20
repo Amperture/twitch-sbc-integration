@@ -3,7 +3,6 @@ import ast
 import thread
 import time
 import json
-import pprint
 
 clientID = "3774415"
 psynapsID = "26158435"
@@ -26,7 +25,7 @@ listenDict = {
         } 
 }
 
-def pubsub_handler(q_pubsub):
+def pubsub_handler(q_twitchbeagle, q_pubsub):
 
     def on_error(ws, error):
         print error
@@ -35,7 +34,6 @@ def pubsub_handler(q_pubsub):
         print "### closed ###"
 
     def ping_socket(ws):
-        print("Are we okay now?")
         while True:
             time.sleep(240)
             ws.send(json.dumps(pingDict)) 
@@ -46,18 +44,13 @@ def pubsub_handler(q_pubsub):
 
     def on_message(ws, message):
         jsonmessage = json.loads(message)
-        pprint.pprint(jsonmessage, indent=2)
         try: 
             message_check = json.loads(jsonmessage['data']['message'])
-            print(type(message_check))
-            pprint.pprint((message_check))
-            print(message_check['message_type'])
             if message_check['message_type'] == 'bits_event':
-                print("BITS EVENT FOUND")
                 queueEvent = {}
                 queueEvent['eventType'] = 'electrical'
                 queueEvent['event'] = 'bits'
-                q_pubsub.put(queueEvent)
+                q_twitchbeagle.put(queueEvent)
 
                 bits_used = str(message_check['data']['bits_used'])
                 user_name = message_check['data']['user_name']
@@ -67,7 +60,7 @@ def pubsub_handler(q_pubsub):
                 queueEvent['eventType'] = 'twitchchatbot'
                 queueEvent['event'] = ("Thank you, %s, for sending %s Bit(s) "
                         "to %s!!" % (user_name, bits_used, channel_name))
-                q_pubsub.put(queueEvent)
+                q_twitchbeagle.put(queueEvent)
 
         except: 
             pass

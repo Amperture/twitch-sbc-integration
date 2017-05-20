@@ -3,7 +3,7 @@ import importlib
 import time
 import json
 
-def timer_handler(q_timer):
+def timer_handler(q_twitchbeagle, q_timer):
 
     time_to_sleep = 60*20
     messageIndex = 0 
@@ -21,4 +21,4 @@ def timer_handler(q_timer):
 
         messageIndex += 1
         if messageIndex == len(messages): messageIndex = 0
-        q_timer.put(queueEvent)
+        q_twitchbeagle.put(queueEvent)

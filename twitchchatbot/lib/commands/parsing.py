@@ -113,7 +113,7 @@ Check all parameters for valid command usage:
     -- Is the command a simple text return, or does it require code?
 '''
 #TODO: IMPLEMENT CURRENCY SYSTEM
-def check_command(con, msgDict, botQueue):
+def check_command(con, msgDict, q_twitchbeagle):
     commandHead = msgDict['splitcommand'][0]
 
     #Check if chat message is a command
@@ -153,7 +153,7 @@ def check_command(con, msgDict, botQueue):
     return True
 
 
-def execute_command(con, msgDict, botQueue):
+def execute_command(con, msgDict, q_twitchbeagle):
     commandHead = msgDict['splitcommand'][0]
     if check_command_is_function(commandHead): 
 
@@ -163,7 +163,7 @@ def execute_command(con, msgDict, botQueue):
         )
 
         msg = commandReturn.pop('msg', None) 
-        botQueue.put(commandReturn) 
+        q_twitchbeagle.put(commandReturn) 
 
         if msg: 
             send_message(

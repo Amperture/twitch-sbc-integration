@@ -8,7 +8,9 @@ import cPickle as pickle
 import time
 import os
 import re
-from threading import Thread
+#from threading import Thread
+import multiprocessing.queues
+import multiprocessing
 from config import CHAT_TOKEN
 
 from .lib.command_headers import commands
@@ -20,6 +22,7 @@ from Queue import Queue
 
 def irc_datastream_recv(con, data, q_irc):
     while True:
+        time.sleep(0.01)
         data = data+con.recv(1024)
         data_split = re.split(r'[\r\n]+', data)
         data = data_split.pop()
@@ -31,7 +34,7 @@ def irc_datastream_recv(con, data, q_irc):
                 
 
 
-def twitchchatbot_handler(botQueue):
+def twitchchatbot_handler(q_twitchbeagle, q_twitchchatbot):
     Config = ConfigParser.ConfigParser()
     Config.read('config.ini')
 
@@ -63,16 +66,23 @@ def twitchchatbot_handler(botQueue):
     con.send('CAP REQ :twitch.tv/tags\r\n')
     con.send('CAP REQ :twitch.tv/membership\r\n')
 
-    q_irc_retrieve = Queue()
-    t_irc_retrieve = Thread( target = irc_datastream_recv, args = [con, data, 
-        q_irc_retrieve])
-    t_irc_retrieve.setDaemon(True)
+    q_irc_retrieve = multiprocessing.queues.Queue()
+    t_irc_retrieve = multiprocessing.Process( target = irc_datastream_recv, 
+            args = [con, data, q_irc_retrieve])
+    #t_irc_retrieve.setDaemon(True)
     t_irc_retrieve.start()
 
     while True:
         try:
-            if not botQueue.empty():
-                queueCheck = botQueue.get()
+            time.sleep(0.05)
+            if not q_twitchchatbot.empty():
+                send_message(
+                        con,
+                        CHAN,
+                        q_twitchchatbot.get()['event']
+                )
+                '''
+                queueCheck = q_twitchchatbot.get()
                 if queueCheck['eventType'] == 'twitchchatbot':
                     send_message(
                             con,
@@ -80,7 +90,9 @@ def twitchchatbot_handler(botQueue):
                             queueCheck['event']
                     )
                 else:
-                    botQueue.put(queueCheck)
+                    q_twitchchatbot.put(queueCheck)
+                    time.sleep(0.1)
+                '''
 
 
             if not q_irc_retrieve.empty():
@@ -113,19 +125,20 @@ def twitchchatbot_handler(botQueue):
                         command_run = check_command(
                             con, 
                             parse,
-                            botQueue
+                            q_twitchchatbot
                         )
 
                         if command_run:
                             command_success = execute_command(
                                     con,
                                     parse,
-                                    botQueue
+                                    q_twitchbeagle
                             )
                             if command_success:
                                 update_command_last_used(
                                         parse['splitcommand'][0]
                                 )
+
 
         except socket.error:
             print('Socket died')
@@ -141,7 +154,7 @@ def twitchchatbot_handler(botQueue):
             con.send('CAP REQ :twitch.tv/commands\r\n')
             con.send('CAP REQ :twitch.tv/tags\r\n')
             con.send('CAP REQ :twitch.tv/membership\r\n')
-            continue
+            pass
 
         except socket.timeout:
             print('Socket timeout')
@@ -157,7 +170,7 @@ def twitchchatbot_handler(botQueue):
             con.send('CAP REQ :twitch.tv/commands\r\n')
             con.send('CAP REQ :twitch.tv/tags\r\n')
             con.send('CAP REQ :twitch.tv/membership\r\n')
-            continue
+            pass
 
 
 if __name__ == "__main__":

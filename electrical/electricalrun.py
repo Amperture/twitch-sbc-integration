@@ -3,7 +3,7 @@ import Adafruit_BBIO.GPIO as GPIO
 import importlib
 import time
 
-def electrical_handler(q_gpio):
+def electrical_handler(q_twitchbeagle, q_gpio):
     '''
     SETUP GPIO HERE
     '''
@@ -24,19 +24,13 @@ def electrical_handler(q_gpio):
         CHECK q_gpio for messages, execute messages accordingly
         '''
         if not q_gpio.empty():
-            q_gpio_check = q_gpio.get()
+            queueEvent = q_gpio.get()['event'].split(' ')
+            queueHead = queueEvent[0]
+            queueArgs = list(queueEvent)
+            queueArgs.remove(queueHead) 
 
-            if q_gpio_check ['eventType'] == "electrical":
-                queueEvent = q_gpio_check['event'].split(' ')
-                queueHead = queueEvent[0]
-                queueArgs = list(queueEvent)
-                queueArgs.remove(queueHead) 
-
-                module = importlib.import_module(
-                        'electrical.reactions.%s' % queueHead
-                        )
-                gpioFunc = getattr(module, "react_chat_%s" % queueHead)
-                gpioFunc(queueArgs, GPIO)
-            else:
-                q_gpio.put(q_gpio_check)
-                time.sleep(2)
+            module = importlib.import_module(
+                    'electrical.reactions.%s' % queueHead
+                    )
+            gpioFunc = getattr(module, "react_chat_%s" % queueHead)
+            gpioFunc(queueArgs, GPIO)

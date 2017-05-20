@@ -93,5 +93,4 @@ if __name__ == "__main__":
         print("Username: %s" %user['user']['name'])
         print("Type: %s" %user['user']['type'])
         print user['user']['display_name'].encode('utf-8')
-        #print("Display: %s" % repr(user['user']['display_name']))
-        print "\r\n\r\n"
+        print "\r\n"
