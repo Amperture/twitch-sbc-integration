@@ -26,23 +26,6 @@ def twitchapi_handler(q_twitchbeagle, q_twitchapi):
                 apiFunc = getattr(module, "react_chat_%s" % eventHead)
                 apiFunc(eventArgs)
 
-                '''
-                queueCheck = q_twitchapi.get()
-                if queueCheck['eventType'] == 'twitchapi':
-                    queueEvent = queueCheck['event'].split(' ')
-                    queueHead = queueEvent[0]
-                    queueArgs = list(queueEvent)
-                    queueArgs.remove(queueHead) 
-
-                    module = importlib.import_module(
-                            'twitchapi.commands.%s' % queueHead
-                            )
-                    apiFunc = getattr(module, "react_chat_%s" % queueHead)
-                    apiFunc(queueArgs)
-                else:
-                    q_twitchapi.put(queueCheck)
-                '''
-
             checkForNewFollower(channelName, q_twitchbeagle)
             time.sleep(5)
         except Exception,e:
@@ -65,22 +48,3 @@ def checkForNewFollower(channel, q_twitchbeagle):
 
     }
     q_twitchbeagle.put(event)
-    '''
-    else:
-        with open('twitchapi/latestfollower', "w+") as f:
-            f.write(latestFollower)
-
-        queueEvent = {
-                'eventType' : 'electrical',
-                'event'     : 'newfollower'
-        }
-        q_twitchapi.put(queueEvent)
-
-        queueEvent = {
-                'eventType' : 'twitchchatbot',
-                'event'     : ('%s has followed the channel! '
-                    'Thank you so much! Enjoy your dancing light '
-                    'show!' % latestFollower)
-        }
-        q_twitchapi.put(queueEvent)
-        '''
