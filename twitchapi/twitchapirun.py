@@ -19,7 +19,7 @@ def twitchapi_handler(q_twitchbeagle, q_twitchapi):
                 event = q_twitchapi.get()['event'].split(' ')
                 eventArgs = list(event)
                 eventHead = event[0]
-                eventArgs = remove(eventHead)
+                eventArgs.remove(eventHead)
                 module = importlib.import_module(
                         'twitchapi.commands.%s' % eventHead
                         )
