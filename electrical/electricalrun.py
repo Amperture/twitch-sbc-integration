@@ -20,9 +20,7 @@ def electrical_handler(q_twitchbeagle, q_gpio):
         GPIO.setup(setup, GPIO.IN)
         
     while True:
-        '''
-        CHECK q_gpio for messages, execute messages accordingly
-        '''
+        time.sleep(0.05)
         if not q_gpio.empty():
             queueEvent = q_gpio.get()['event'].split(' ')
             queueHead = queueEvent[0]

@@ -41,9 +41,9 @@ for module in enabledModules:
     #moduleThreads[module]['thread'].setDaemon(True)
     moduleThreads[module]['thread'].start()
 
-#pubsubex(q_twitchbeagle)
-    
-    
+for thread in moduleThreads:
+    print(thread, moduleThreads[thread]['thread'].pid)
+
 
 while True:
     if not q_twitchbeagle.empty():

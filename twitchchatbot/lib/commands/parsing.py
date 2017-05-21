@@ -163,7 +163,8 @@ def execute_command(con, msgDict, q_twitchbeagle):
         )
 
         msg = commandReturn.pop('msg', None) 
-        q_twitchbeagle.put(commandReturn) 
+        if 'eventType' in commandReturn:
+            q_twitchbeagle.put(commandReturn) 
 
         if msg: 
             send_message(

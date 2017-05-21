@@ -3,25 +3,29 @@ import ast
 import thread
 import time
 import json
+import ConfigParser
+from twitchapi.krakenv5.channels import getChannelId
+from config import EDITOR_TOKEN
 
-clientID = "3774415"
-psynapsID = "26158435"
-with open("pubsub/ampertureoauth", 'r') as f:
-    ampOauth = f.read().rstrip('\n')
+config = ConfigParser.ConfigParser()
+config.read('config.ini')
+
 
 pingDict = {
         'type': 'PING'
 }
+
+channelId = str(getChannelId(config.get('CHAT', 'channel')))
 
 listenDict = {
         'type':"LISTEN",
         'nonce':"twitchPubSub",
         'data': {
             'topics' : [
-                'chat_moderator_actions.' + clientID + '.' + clientID,
-                'channel-bits-events-v1.' + clientID
+                'chat_moderator_actions.' + channelId + '.' + channelId,
+                'channel-bits-events-v1.' + channelId
                 ],
-            'auth_token': ampOauth
+            'auth_token': EDITOR_TOKEN
         } 
 }
 
