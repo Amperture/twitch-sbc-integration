@@ -23,7 +23,8 @@ listenDict = {
         'data': {
             'topics' : [
                 'chat_moderator_actions.' + channelId + '.' + channelId,
-                'channel-bits-events-v1.' + channelId
+                'channel-bits-events-v1.' + channelId,
+                'channel-subscribe-events-v1.' + channelId
                 ],
             'auth_token': EDITOR_TOKEN
         } 
@@ -48,22 +49,50 @@ def pubsub_handler(q_twitchbeagle, q_pubsub):
 
     def on_message(ws, message):
         jsonmessage = json.loads(message)
+        print(jsonmessage)
+        print(jsonmessage['data']['topic'])
         try: 
-            message_check = json.loads(jsonmessage['data']['message'])
-            if message_check['message_type'] == 'bits_event':
+            message_check = jsonmessage['data']
+            if ("topic" in message_check) and \
+                    message_check['topic'] == 'channel-bits-events-v1.%s' \
+                    % channelId:
                 queueEvent = {}
                 queueEvent['eventType'] = 'electrical'
                 queueEvent['event'] = 'bits'
                 q_twitchbeagle.put(queueEvent)
 
-                bits_used = str(message_check['data']['bits_used'])
-                user_name = message_check['data']['user_name']
-                channel_name = message_check['data']['channel_name']
+
+                message_bits = json.loads(message_check['message'])
+                bits_used = str(message_bits['data']['bits_used'])
+                user_name = message_bits['data']['user_name']
+                channel_name = message_bits['data']['channel_name']
 
                 queueEvent = {}
                 queueEvent['eventType'] = 'twitchchatbot'
                 queueEvent['event'] = ("Thank you, %s, for sending %s Bit(s) "
                         "to %s!!" % (user_name, bits_used, channel_name))
+                q_twitchbeagle.put(queueEvent)
+
+
+            
+            elif "topic" in message_check and \
+                message_check['topic'] == 'channel-subscribe-events-v1.%s' \
+                % channelId:
+
+                print ("SUBSCRIBE EVENT DETECTED")
+
+                queueEvent = {}
+                queueEvent['eventType'] = 'electrical'
+                queueEvent['event'] = 'bits'
+                q_twitchbeagle.put(queueEvent)
+
+                user_name = message_check['data']['message']['user_name']
+                channel_name = message_check['data']['message']['channel_name']
+
+                queueEvent = {}
+                queueEvent['eventType'] = 'twitchchatbot'
+                queueEvent['event'] = ("Thank you, %s, for subscribing "
+                        "to %s!!" % (user_name, channel_name))
                 q_twitchbeagle.put(queueEvent)
 
         except: 

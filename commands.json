@@ -1,15 +1,33 @@
 {
  "!green": {
-  "limit": 4, 
-  "argc": 1, 
   "return": "command", 
+  "argc": 1, 
+  "limit": 4, 
   "last_used": 0
  }, 
+ "!beagle": {
+  "return": "Hello! Amp is camera shy, so I'm the one actually on camera! I'm a Twitch Beagle and react to Follows, Bits, and a few chat commands! My favorite is !xmas !!", 
+  "last_used": 0, 
+  "limit": 10, 
+  "userbadge": "moderator"
+ }, 
  "!red": {
-  "limit": 5, 
-  "argc": 1, 
   "return": "command", 
+  "argc": 1, 
+  "limit": 5, 
   "last_used": 0
+ }, 
+ "!settitle": {
+  "last_used": 0, 
+  "return": "command", 
+  "limit": 5, 
+  "userbadge": "moderator"
+ }, 
+ "!setgame": {
+  "last_used": 0, 
+  "return": "command", 
+  "limit": 5, 
+  "userbadge": "moderator"
  }, 
  "!modcheck": {
   "last_used": 0, 
@@ -19,9 +37,9 @@
   "userbadge": "moderator"
  }, 
  "!xmas": {
-  "limit": 10, 
-  "argc": 0, 
   "return": "command", 
+  "argc": 0, 
+  "limit": 10, 
   "last_used": 0
  }, 
  "!subcheck": {
@@ -39,27 +57,26 @@
   "userbadge": "broadcaster"
  }, 
  "!hello": {
-  "limit": 10, 
   "return": "Hello <user>!", 
+  "limit": 10, 
   "last_used": 0
  }, 
  "!blue": {
-  "limit": 10, 
-  "argc": 1, 
   "return": "command", 
+  "argc": 1, 
+  "limit": 10, 
   "last_used": 0
  }, 
  "!discord": {
-  "limit": 10, 
-  "argc": 0, 
   "return": "<user>, you can find Amp's Discord server at: https://discordapp.com/invite/7Z4muuK", 
+  "argc": 0, 
+  "limit": 10, 
   "last_used": 0
  }, 
  "!twitter": {
   "last_used": 0, 
   "return": "Please visit Amp's Twitter page and drop him a follow at https://twitter.com/amperture !", 
-  "limit": 10, 
-  "userbadge": "moderator"
+  "limit": 10
  }, 
  "!addcom": {
   "last_used": 0, 
@@ -67,21 +84,21 @@
   "limit": 10, 
   "userbadge": "broadcaster"
  }, 
- "!settitle": {
-  "last_used": 600, 
+ "!testsub": {
+  "last_used": 0, 
   "return": "command", 
-  "limit": 5, 
-  "userbadge": "moderator"
+  "limit": 10, 
+  "userbadge": "broadcaster"
  }, 
- "!setgame": {
-  "last_used": 600, 
+ "!testbits": {
+  "last_used": 0, 
   "return": "command", 
-  "limit": 5, 
-  "userbadge": "moderator"
+  "limit": 10, 
+  "userbadge": "broadcaster"
  }, 
  "!cmdlist": {
-  "limit": 10, 
   "return": "command", 
+  "limit": 10, 
   "last_used": 0
  }
 }

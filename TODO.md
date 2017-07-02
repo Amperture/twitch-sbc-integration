@@ -17,3 +17,14 @@ Look for ways for !addcom to be exploited for fun and profit.
 * Work on setting up system to pull OAuth tokens automatically.
     * Start thinking about ways to set up client with application
         authorization url.
+
+
+
+Streamlabs options:
+    * Open up a Paypal for streamlabs (Don't want to do this)
+    * Elaborate Streamlabs "fake donation setup"
+    * Donate to Self on CoinJerk (will cost bitcoin)
+
+Web interface:
+    * Flask? Django?
+    * CSS? JS? How advanced do we want to go?

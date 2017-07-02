@@ -4,9 +4,6 @@ import importlib
 import time
 
 def electrical_handler(q_twitchbeagle, q_gpio):
-    '''
-    SETUP GPIO HERE
-    '''
     Config = ConfigParser.ConfigParser()
     Config.read('config.ini')
 

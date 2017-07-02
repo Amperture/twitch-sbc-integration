@@ -1,4 +1,6 @@
 #from config import CLIENT_ID, CLIENT_SECRET, CHAT_TOKEN, EDITOR_TOKEN
+#from config import STREAMLABS_ID, STREAMLABS_SECRET, STREAMLABS_REDIRECT,
+    #STREAMLABS_APPNAME
 import time
 import ConfigParser
 import importlib
@@ -49,8 +51,9 @@ def twitchbeaglerun():
     while True:
         if not q_twitchbeagle.empty():
             queueEvent = q_twitchbeagle.get()
-            eventType = queueEvent['eventType']
-            moduleThreads[eventType]['queue'].put(queueEvent)
+            if queueEvent['eventType']:
+                eventType = queueEvent['eventType']
+                moduleThreads[eventType]['queue'].put(queueEvent)
         time.sleep(0.1)
 
 
