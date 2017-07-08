@@ -3,9 +3,7 @@ import json
 
 def addcom(user, args):
     # Concatenate a list of strings down to a single, space delimited string.
-    queueEvent = {
-            'eventType' : 'msg'
-    }
+    queueEvent = {}
 
     if len(args) < 2:
         queueEvent['msg'] = "Proper usage: !addcom <cmd> <Text to send>"
