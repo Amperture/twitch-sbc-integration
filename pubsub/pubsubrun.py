@@ -50,20 +50,27 @@ def pubsub_handler(q_twitchbeagle, q_pubsub):
     def on_message(ws, message):
         jsonmessage = json.loads(message)
         print(jsonmessage)
-        print(jsonmessage['data']['topic'])
+        print(type(jsonmessage))
+        if jsonmessage['type'] != 'PONG' and jsonmessage['type'] != 'RESPONSE': 
+            print(jsonmessage['data']['topic'])
+
         try: 
             message_check = jsonmessage['data']
             if ("topic" in message_check) and \
                     message_check['topic'] == 'channel-bits-events-v1.%s' \
                     % channelId:
+                print("BITS EVENT DETECTED")
+                message_bits = json.loads(message_check['message'])
+                bits_used = str(message_bits['data']['bits_used'])
+                print(bits_used)
                 queueEvent = {}
                 queueEvent['eventType'] = 'electrical'
-                queueEvent['event'] = 'bits'
+                queueEvent['event'] = 'bits %s' % bits_used
+                print(queueEvent)
                 q_twitchbeagle.put(queueEvent)
 
 
                 message_bits = json.loads(message_check['message'])
-                bits_used = str(message_bits['data']['bits_used'])
                 user_name = message_bits['data']['user_name']
                 channel_name = message_bits['data']['channel_name']
 
@@ -71,6 +78,7 @@ def pubsub_handler(q_twitchbeagle, q_pubsub):
                 queueEvent['eventType'] = 'twitchchatbot'
                 queueEvent['event'] = ("Thank you, %s, for sending %s Bit(s) "
                         "to %s!!" % (user_name, bits_used, channel_name))
+                print(queueEvent)
                 q_twitchbeagle.put(queueEvent)
 
 
@@ -83,19 +91,31 @@ def pubsub_handler(q_twitchbeagle, q_pubsub):
 
                 queueEvent = {}
                 queueEvent['eventType'] = 'electrical'
-                queueEvent['event'] = 'bits'
+                queueEvent['event'] = 'sub'
                 q_twitchbeagle.put(queueEvent)
 
-                user_name = message_check['data']['message']['user_name']
-                channel_name = message_check['data']['message']['channel_name']
+                subMsgJson = json.loads(message_check['message'])
+                user_name = subMsgJson['display_name']
+
+                print(user_name)
+                channel_name = subMsgJson['channel_name']
+                print(channel_name)
 
                 queueEvent = {}
                 queueEvent['eventType'] = 'twitchchatbot'
-                queueEvent['event'] = ("Thank you, %s, for subscribing "
-                        "to %s!!" % (user_name, channel_name))
+                if "recipient_display_name" in subMsgJson:
+                    sub_recipient = subMsgJson['recipient_display_name']
+                    queueEvent['event'] = ("%s just gifted a subscription to "
+                            "%s!! Thank you both!" 
+                            % (user_name, sub_recipient))
+                else: 
+                    queueEvent['event'] = ("Thank you, %s, for subscribing "
+                            "to %s!!" % (user_name, channel_name))
+
                 q_twitchbeagle.put(queueEvent)
 
-        except: 
+        except Exception, e: 
+            print(e)
             pass
 
     websocket.enableTrace(True)

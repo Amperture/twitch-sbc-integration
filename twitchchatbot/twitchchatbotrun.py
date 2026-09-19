@@ -100,7 +100,7 @@ def twitchchatbot_handler(q_twitchbeagle, q_twitchchatbot):
 
                     # Stay connected to the server
                     if line[0] == 'PING':
-                        print(line[0] +':'+ line[1])
+                        #print(line[0] +':'+ line[1])
                         send_pong(con, line[1])
 
                     # Parse PRIVMSG
@@ -109,10 +109,12 @@ def twitchchatbot_handler(q_twitchbeagle, q_twitchchatbot):
                         fileTime = time.strftime("%Y-%m-%d") + '.txt'
                         filename = os.getcwd() + '/Logs/' + fileTime
                         dir_ = os.getcwd() + '/Logs/'
+                        '''
                         print(time.strftime("%H:%M:%S") + ' | ' + \
                                 parse['display-name'] \
                                 + ' (' + parse['channel'] + ')' + ': ' \
                                 + parse['message'])
+                                '''
                         if not (os.path.exists(dir_)):
                             os.makedirs(dir_)
                         log = open(filename,'a')

@@ -1,5 +1,6 @@
 import requests
 import pprint
+from time import time
 
 requests.packages.urllib3.disable_warnings()
 
@@ -17,9 +18,20 @@ def endpoint_get(endpoint, client_id, **kwargs):
     if 'header' in kwargs:
         headers = kwargs['header']
 
-    r = requests.get(url, headers=headers)
+    success = False
+    for x in xrange(5):
+        r = requests.get(url, headers=headers)
+        try:
+            if r.status_code == 200:
+                success = True
+                break
+        except ValueError as e:
+            print "KRAKEN ERROR"
+            print str(e)
+            time.sleep(20)
 
-    return r.json()
+    if success == True: return r.json()
+
 
 def endpoint_put(endpoint, client_id, **kwargs):
     url = "https://api.twitch.tv/kraken/" + endpoint

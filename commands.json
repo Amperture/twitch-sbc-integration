@@ -3,11 +3,11 @@
   "return": "command", 
   "argc": 1, 
   "limit": 4, 
-  "last_used": 0
+  "last_used": 1502955097.122782
  }, 
  "!beagle": {
-  "return": "Hello! Amp is camera shy, so I'm the one actually on camera! I'm a Twitch Beagle and react to Follows, Bits, and a few chat commands! My favorite is !xmas !!", 
   "last_used": 0, 
+  "return": "Hello! Amp is camera shy, so I'm the one actually on camera! I'm a Twitch Beagle and react to Follows, Bits, and a few chat commands! My favorite is !xmas !!", 
   "limit": 10, 
   "userbadge": "moderator"
  }, 
@@ -15,7 +15,13 @@
   "return": "command", 
   "argc": 1, 
   "limit": 5, 
-  "last_used": 0
+  "last_used": 1502955084.198371
+ }, 
+ "!what": {
+  "last_used": 0, 
+  "return": "Amp is working on CoinJerk!", 
+  "limit": 10, 
+  "userbadge": "moderator"
  }, 
  "!settitle": {
   "last_used": 0, 
@@ -40,7 +46,7 @@
   "return": "command", 
   "argc": 0, 
   "limit": 10, 
-  "last_used": 0
+  "last_used": 1502955112.965408
  }, 
  "!subcheck": {
   "last_used": 0, 
@@ -61,22 +67,46 @@
   "limit": 10, 
   "last_used": 0
  }, 
- "!blue": {
+ "!testsub": {
+  "last_used": 0, 
   "return": "command", 
-  "argc": 1, 
-  "limit": 10, 
-  "last_used": 0
+  "limit": 1, 
+  "userbadge": "broadcaster"
  }, 
  "!discord": {
   "return": "<user>, you can find Amp's Discord server at: https://discordapp.com/invite/7Z4muuK", 
   "argc": 0, 
   "limit": 10, 
-  "last_used": 0
+  "last_used": 1502709049.485649
+ }, 
+ "!currentproject": {
+  "return": "Amp is working on the Twitch Beagle! That's the electronics lighting project that connects to Twitch!", 
+  "last_used": 0, 
+  "limit": 10, 
+  "userbadge": "moderator"
+ }, 
+ "!blue": {
+  "return": "command", 
+  "argc": 1, 
+  "limit": 0, 
+  "last_used": 1502955091.70126
  }, 
  "!twitter": {
-  "last_used": 0, 
+  "last_used": 1502709030.33403, 
   "return": "Please visit Amp's Twitter page and drop him a follow at https://twitter.com/amperture !", 
   "limit": 10
+ }, 
+ "!testbits": {
+  "last_used": 0, 
+  "return": "command", 
+  "limit": 1, 
+  "userbadge": "broadcaster"
+ }, 
+ "!testfollow": {
+  "last_used": 0, 
+  "return": "command", 
+  "limit": 1, 
+  "userbadge": "broadcaster"
  }, 
  "!addcom": {
   "last_used": 0, 
@@ -84,17 +114,10 @@
   "limit": 10, 
   "userbadge": "broadcaster"
  }, 
- "!testsub": {
+ "!lights": {
   "last_used": 0, 
-  "return": "command", 
-  "limit": 10, 
-  "userbadge": "broadcaster"
- }, 
- "!testbits": {
-  "last_used": 0, 
-  "return": "command", 
-  "limit": 10, 
-  "userbadge": "broadcaster"
+  "return": "The lights are part of Amp's Twitch Beagle Project, they will react with animations for events such as channel follows, subscriptions, bits, donations and chat commands! Type !cmdlist for a list of chat commands!",
+  "limit": 10
  }, 
  "!cmdlist": {
   "return": "command", 

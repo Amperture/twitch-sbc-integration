@@ -99,3 +99,68 @@ ENV/
 
 #vim business
 *.swp
+# ---------------------------------------------------------------
+# Credentials -- never commit. All live secrets are in config.py.
+# ---------------------------------------------------------------
+config.py
+config.ini
+token
+editor_token
+slaccesstoken
+slrefreshtoken
+LaunchpadBot_ClientID
+**/LaunchpadBot_ClientID
+pubsub/ampertureoauth
+
+# ---------------------------------------------------------------
+# Third-party user data -- other people's chat messages and names
+# ---------------------------------------------------------------
+Logs/
+**/Logs/
+codebase/
+latest
+latestfollower
+**/latestfollower
+streamlabs_latest_donation
+currency-log.txt
+
+# Captured live PubSub payloads -- these contain real viewers' names,
+# Twitch user IDs and messages. pubsub/examplebits.json is Twitch's own
+# documentation sample ("dallas") and is safe to keep.
+pubsubex.json
+pubsub/pubsubex.json
+substringtesting
+
+# ---------------------------------------------------------------
+# Databases
+# ---------------------------------------------------------------
+*.db
+
+# ---------------------------------------------------------------
+# Run output
+# ---------------------------------------------------------------
+*-log.txt
+*-log.txt.*
+nohup.out
+**/nohup.out
+errors
+**/errors
+
+# ---------------------------------------------------------------
+# Editor leftovers
+# ---------------------------------------------------------------
+.*.sw[a-p]
+*.sw[a-p]
+*~
+
+# ---------------------------------------------------------------
+# Stray
+# ---------------------------------------------------------------
+Python.gitignore.1
+
+# ---------------------------------------------------------------
+# Un-ignore the source tree the stock `lib/` rule above swallows.
+# twitchchatbot/lib/ is project source, not a Python install dir.
+# ---------------------------------------------------------------
+!twitchchatbot/lib/
+!twitchchatbot/lib/**

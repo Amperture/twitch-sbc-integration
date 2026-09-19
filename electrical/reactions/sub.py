@@ -1,31 +1,39 @@
 import time
+import random
 
-def react_chat_sub(eventType, GPIO):
-    GREEN_LED = 'P8_7'
-    RED_LED = 'P8_8'
-    BLUE_LED = 'P8_9'
+def react_chat_sub(eventType, GPIO, spi):
+    ledcount = 120
+    red = random.randrange(0x00, 0xFF)
+    blue = random.randrange(0x00, 0xFF)
+    green = random.randrange(0x00, 0xFF)
+
 
     for x in range(4):
-        GPIO.output(GREEN_LED, GPIO.HIGH)
-        time.sleep(0.1)
-        GPIO.output(RED_LED, GPIO.HIGH)
-        time.sleep(0.1)
-        GPIO.output(BLUE_LED, GPIO.HIGH)
-        time.sleep(0.1)
-        GPIO.output(GREEN_LED, GPIO.LOW)
-        time.sleep(0.1)
-        GPIO.output(RED_LED, GPIO.LOW)
-        time.sleep(0.1)
-        GPIO.output(BLUE_LED, GPIO.LOW)
-        time.sleep(0.33)
-        GPIO.output(BLUE_LED, GPIO.HIGH)
-        time.sleep(0.1)
-        GPIO.output(RED_LED, GPIO.HIGH)
-        time.sleep(0.1)
-        GPIO.output(GREEN_LED, GPIO.HIGH)
-        time.sleep(0.1)
-        GPIO.output(BLUE_LED, GPIO.LOW)
-        time.sleep(0.1)
-        GPIO.output(RED_LED, GPIO.LOW)
-        time.sleep(0.1)
-        GPIO.output(GREEN_LED, GPIO.LOW)
+        spi.writebytes([0x00, 0x00, 0x00, 0x00])
+        for x in range(ledcount):
+            if x%2 == 0:
+                spi.writebytes([0xE4, blue, green, red])
+            else:
+                spi.writebytes([0xEF, 0x00, 0x00, 0x00])
+        spi.writebytes([0x00, 0x00, 0x00, 0x00])
+        spi.writebytes([0x00, 0x00, 0x00, 0x00])
+        spi.writebytes([0x00, 0x00, 0x00, 0x00])
+        time.sleep(0.3)
+
+        spi.writebytes([0x00, 0x00, 0x00, 0x00])
+        for x in range(ledcount):
+            if x%2 == 1:
+                spi.writebytes([0xE4, blue, green, red])
+            else:
+                spi.writebytes([0xEF, 0x00, 0x00, 0x00])
+        spi.writebytes([0x00, 0x00, 0x00, 0x00])
+        spi.writebytes([0x00, 0x00, 0x00, 0x00])
+        spi.writebytes([0x00, 0x00, 0x00, 0x00])
+        time.sleep(0.3)
+
+        spi.writebytes([0x00, 0x00, 0x00, 0x00])
+        for x in range(ledcount):
+            spi.writebytes([0xE0, 0x00, 0x00, 0x00])
+        spi.writebytes([0x00, 0x00, 0x00, 0x00])
+        spi.writebytes([0x00, 0x00, 0x00, 0x00])
+        spi.writebytes([0x00, 0x00, 0x00, 0x00])

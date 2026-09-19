@@ -19,9 +19,31 @@ def index():
     if firsttimecheck:
         return firsttimecheck
 
+    if request.args.get('command'):
+        event = {
+                'eventType' : 'electrical',
+                'event'     : request.args.get('command')
+        }
+        q_twitchbeagle.put(event)
+
+    return render_template('skeleton.html')
+
+@app.route('/testsub')
+def testsub():
+    firsttimecheck = checkforfirstsetup()
+    if firsttimecheck:
+        return firsttimecheck
+
     event = {
             'eventType' : 'electrical',
-            'event'     : 'red toggle'
+            'event'     : 'sub'
+    }
+    q_twitchbeagle.put(event)
+
+    event = {
+            'eventType' : 'twitchchatbot',
+            'event'     : 'Amp has initiated a test of the new Subscriber \
+                    animation from the web interface!'
     }
     q_twitchbeagle.put(event)
     return "Hello, World!"
@@ -97,7 +119,7 @@ def twappsetup():
     return redirect(
             "https://api.twitch.tv/kraken/oauth2/authorize?client_id=" +\
             CLIENT_ID + \
-            "&redirect_uri=http://192.168.1.140:5000/twitchauth" +\
+            "&redirect_uri=http://192.168.1.108:5000/twitchauth" +\
             "&response_type=code" +\
             "&scope=channel_editor+channel_subscriptions"
     )
@@ -116,7 +138,7 @@ def twitchauth():
     if request.args.get('code'):
         authcall = {
                 'client_id'     :      CLIENT_ID,
-                'redirect_uri'  :      "http://192.168.1.140:5000/twitchauth",
+                'redirect_uri'  :      "http://192.168.1.108:5000/twitchauth",
                 'client_secret' :      CLIENT_SECRET,
                 'code'          :      request.args.get('code'),
                 'grant_type'    :      'authorization_code'

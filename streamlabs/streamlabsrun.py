@@ -8,12 +8,63 @@ import time
 
 def streamlabs_handler(q_twitchbeagle, q_gpio):
     #Grab streamlabs tokens
+    with open('slrefreshtoken', 'r') as f: 
+        r_token = f.read().strip()
 
-    headers = []
     while True:
         try:
-            with open('slrefreshtoken', 'r') as f:
-                r_token = f.read()
+            print("Checking the StreamElements API!")
+            url = "https://api.streamelements.com/kappa/v2/tips/59bc175476eed8257aabcf8f"
+            querystring = {
+                    'offset':0,
+                    'limit':1,
+                    'sort':'-createdAt',
+                    }
+            headers = {
+                    'accept': 'application/json',
+                    'authorization': 'Bearer {}'.format(r_token)
+                    }
+            time.sleep(10)
+            response = requests.get(url, headers=headers, params=querystring)
+            pprint.pprint(response.json())
+            donationinfo = response.json()['docs'][0]
+
+            '''
+            print('amount', donationinfo['donation']['amount'])
+            print('donor', donationinfo['donation']['user']['username'])
+            print('message', donationinfo['donation']['message'])
+            '''
+
+            with open("streamlabs_latest_donation", 'r') as f:
+                latestdonation = f.read()
+
+            if latestdonation != donationinfo['_id']:
+                queueEvent = {
+                        'eventType' : 'electrical',
+                        'event'     : 'bits %d' % 
+                            int(float(donationinfo['donation']['amount']) * 100)
+                }
+                q_twitchbeagle.put(queueEvent)
+                TWOPLACES = Decimal(10) ** -2
+                queueEvent = {
+                        'eventType' : 'twitchchatbot',
+                        'event'     : 'Donation from %s for $%s.' % (
+                            donationinfo['donation']['user']['username'], 
+                            Decimal(donationinfo['donation']['amount']).\
+                                    quantize(TWOPLACES))
+                }
+                q_twitchbeagle.put(queueEvent)
+                with open("streamlabs_latest_donation", 'w') as f:
+                    print(donationinfo['_id'])
+                    print("WE ARE WRITING TO THE FILE")
+                    f.write(str(donationinfo['_id']))
+                    print("WE HAVE WRITTEN TO THE FILE")
+
+        except Exception,e:
+            print e 
+            pass
+
+        """
 
             with open('slaccesstoken', 'r') as f:
                 a_token = f.read()
@@ -53,16 +104,14 @@ def streamlabs_handler(q_twitchbeagle, q_gpio):
                     params = donations_params
             )
             #usd_two_places = float(format(usd_value, '.2f')))
-            donationinfo = donate.json()['data'][0]
-            #print('amount', donationinfo['amount'])
-            #print('donor', donationinfo['name'])
-            #print('message', donationinfo['message'])
             with open("streamlabs_latest_donation", 'r') as f:
                 latestdonation = int(f.read())
             if latestdonation != donationinfo['donation_id']:
+                print(int(float(donationinfo['amount']) * 100))
                 queueEvent = {
                         'eventType' : 'electrical',
-                        'event'     : 'bits'
+                        'event'     : 'bits %d' % 
+                            int(float(donationinfo['amount']) * 100)
                 }
                 q_twitchbeagle.put(queueEvent)
                 TWOPLACES = Decimal(10) ** -2
@@ -79,8 +128,6 @@ def streamlabs_handler(q_twitchbeagle, q_gpio):
                     print("WE ARE WRITING TO THE FILE")
                     f.write(str(donationinfo['donation_id']))
                     print("WE HAVE WRITTEN TO THE FILE")
+            """
 
-        except Exception,e:
-            print e
-            pass
 

@@ -87,10 +87,14 @@ def getChannelId(channel):
     return getChannelObject(channel)['_id']
 
 if __name__ == "__main__":
-    followers = getChannelFollowers('amperture')
+    followers = getChannelObject('amperture')
+    print followers
+
+    '''
     for user in followers['follows']:
         print("ID: %d"% user['user']['_id'])
         print("Username: %s" %user['user']['name'])
         print("Type: %s" %user['user']['type'])
         print user['user']['display_name'].encode('utf-8')
         print "\r\n"
+        '''
