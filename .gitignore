@@ -163,4 +163,5 @@ Python.gitignore.1
 # twitchchatbot/lib/ is project source, not a Python install dir.
 # ---------------------------------------------------------------
 !twitchchatbot/lib/
-!twitchchatbot/lib/**
+!twitchchatbot/lib/**/
+!twitchchatbot/lib/**/*.py
